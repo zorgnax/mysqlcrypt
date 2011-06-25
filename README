@@ -1,0 +1,19 @@
+MySQL Crypt
+
+A library of cryptographic functions not available by default in mysql.
+This library includes functions to create an LM hash, DES hash (not the
+triple DES which is included as a built-in function), salted unix md5
+hash, MD4 hash, and a NT hash.
+
+It's a useful library for when you are working in the database, otherwise
+I would suggest that passwords be encrypted elsewhere and not transfered
+over a network in plaintext.
+
+Install by running 'make install', you may have to alter the Makefile
+to provide mysql with the correct host, port, user, and password options.
+
+These functions can be used anywhere mysql expects an expression to be:
+
+    > select unixmd5crypt('password');
+    > select lmcrypt('password');
+
