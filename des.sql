@@ -52,7 +52,7 @@ end;;
 
 -- The following is a mysql translation of the
 -- DES algorithm found in Samba's smbdes.c at
--- https://github.com/lkcl/cliffs/blob/master/libsmb/smbdes.c
+-- https://github.com/samba-team/samba/blob/7fa51/libcli/auth/smbdes.c
 drop function if exists descrypt;;
 create function descrypt (pass text, kee text)
 returns text
