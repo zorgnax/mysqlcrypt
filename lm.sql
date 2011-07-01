@@ -1,3 +1,5 @@
+-- lm.sql
+
 drop function if exists lmkey;;
 create function lmkey (str text)
 returns text

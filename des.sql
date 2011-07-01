@@ -1,3 +1,5 @@
+-- des.sql
+
 drop function if exists permute;;
 create function permute (bin text, perm text)
 returns text

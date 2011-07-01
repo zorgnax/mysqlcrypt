@@ -1,3 +1,5 @@
+-- unixmd5.sql
+
 drop function if exists autosaltcrypt;;
 drop function if exists unixmd5crypt;;
 create function unixmd5crypt (pass text)
