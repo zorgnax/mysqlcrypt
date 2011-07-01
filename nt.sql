@@ -1,5 +1,3 @@
--- TODO
-
 drop function if exists bswap16;;
 create function bswap16 (bin text)
 returns text
@@ -33,7 +31,7 @@ returns text
 comment 'Encodes a string to binary UCS2 little endian'
 deterministic
 begin
-    return bswap16(str2bin(convert(str using ucs2)));
+    return bin2str(bswap16(hex2bin(hex(convert(str using ucs2)))));
 end;;
 
 drop function if exists ntcrypt;;
@@ -43,7 +41,6 @@ comment 'Encrypts a string to an NT hash'
 deterministic
 begin
     declare ucs2le text default ucs2le(pass);
-    -- TODO
-    return ucs2le;
+    return md4(ucs2le);
 end
 
