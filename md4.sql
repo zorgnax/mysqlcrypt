@@ -28,11 +28,11 @@ begin
             leave FOURBYTELOOP;
         end if;
         set x = substr(bin, i * 4 * 8 + 1, 4 * 8);
-        set a = substr(x, 1, 4);
-        set b = substr(x, 5, 4);
-        set c = substr(x, 9, 4);
-        set d = substr(x, 13, 4);
-        set m = concat(m, lpad(conv(concat(c, d, a, b), 2, 10), 10, 0));
+        set a = substr(x, 1, 8);
+        set b = substr(x, 9, 8);
+        set c = substr(x, 17, 8);
+        set d = substr(x, 25, 8);
+        set m = concat(m, lpad(conv(concat(d, c, b, a), 2, 10), 10, 0));
         set i = i + 1;
     end loop;
     return m;
