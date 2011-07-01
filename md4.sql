@@ -250,6 +250,6 @@ begin
     set b = lpad(conv(md4reversebytes(md4a(s, 1)), 2, 16), 8, 0);
     set c = lpad(conv(md4reversebytes(md4a(s, 2)), 2, 16), 8, 0);
     set d = lpad(conv(md4reversebytes(md4a(s, 3)), 2, 16), 8, 0);
-    return lower(concat(a, b, c, d));
+    return concat(a, b, c, d);
 end;;
 
