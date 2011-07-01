@@ -88,7 +88,8 @@ begin
     declare b int unsigned default md4a(s, ob);
     declare c int unsigned default md4a(s, oc);
     declare d int unsigned default md4a(s, od);
-    declare x int unsigned default md4lshift(a + md4f(b, c, d) + md4a(m, k), n);
+    declare x int unsigned default md4lshift(
+        a + md4f(b, c, d) + md4a(m, k) & 0xffffffff, n);
     set a = if(oa = 0, x, md4a(s, 0));
     set b = if(oa = 1, x, md4a(s, 1));
     set c = if(oa = 2, x, md4a(s, 2));
@@ -105,7 +106,8 @@ begin
     declare b int unsigned default md4a(s, ob);
     declare c int unsigned default md4a(s, oc);
     declare d int unsigned default md4a(s, od);
-    declare x int unsigned default md4lshift(a + md4g(b, c, d) + md4a(m, k) + 0x5a827999, n);
+    declare x int unsigned default md4lshift(
+        a + md4g(b, c, d) + md4a(m, k) + 0x5a827999 & 0xffffffff, n);
     set a = if(oa = 0, x, md4a(s, 0));
     set b = if(oa = 1, x, md4a(s, 1));
     set c = if(oa = 2, x, md4a(s, 2));
@@ -122,7 +124,8 @@ begin
     declare b int unsigned default md4a(s, ob);
     declare c int unsigned default md4a(s, oc);
     declare d int unsigned default md4a(s, od);
-    declare x int unsigned default md4lshift(a + md4h(b, c, d) + md4a(m, k) + 0x6ed9eba1, n);
+    declare x int unsigned default md4lshift(
+        a + md4h(b, c, d) + md4a(m, k) + 0x6ed9eba1 & 0xffffffff, n);
     set a = if(oa = 0, x, md4a(s, 0));
     set b = if(oa = 1, x, md4a(s, 1));
     set c = if(oa = 2, x, md4a(s, 2));
@@ -188,7 +191,22 @@ begin
     set s = md4r3(s, 3, 0, 1, 2, m, 11, 9);
     set s = md4r3(s, 2, 3, 0, 1, m, 7, 11);
     set s = md4r3(s, 1, 2, 3, 0, m, 15, 15);
-    return md4s(a + md4a(s, 0), b + md4a(s, 1), c + md4a(s, 2), d + md4a(s, 3));
+    return md4s(
+        a + md4a(s, 0) & 0xffffffff,
+        b + md4a(s, 1) & 0xffffffff,
+        c + md4a(s, 2) & 0xffffffff,
+        d + md4a(s, 3) & 0xffffffff);
+end;;
+
+drop function if exists md4reversebytes;;
+create function md4reversebytes (x int unsigned)
+returns text
+comment 'Converts a 32 bit int to a bit string with its bytes reversed'
+deterministic
+begin
+    declare b text default lpad(conv(x, 10, 2), 8 * 4, 0);
+    return concat(
+        substr(b, 25, 8), substr(b, 17, 8), substr(b, 9, 8), substr(b, 1, 8));
 end;;
 
 drop function if exists md4;;
@@ -203,6 +221,10 @@ begin
     declare i int default 0;
     declare n int;
     declare bits int default length(bin);
+    declare a text;
+    declare b text;
+    declare c text;
+    declare d text;
     REDUCELOOP: loop
         if length(bin) - i <= 8 * 64 then
             leave REDUCELOOP;
@@ -214,10 +236,17 @@ begin
     set n = length(bin) - i;
     set bin = rpad(concat(substr(bin, i + 1), hex2bin('80')), 8 * 128, 0);
     if n <= 8 * 55 then
-        set bin = concat(substr(bin, 1, 55 * 8), foo(bits), substr(bin, ));
+        set bin = rpad(concat(substr(bin, 1, 56 * 8), md4reversebytes(bits)), 8 * 64, 0);
+        set m = md4m(bin);
+        return m;
+        set s = md464(s, m);
     else
-
+        begin end;
     end if;
-    return s;
+    set a = lpad(conv(md4reversebytes(md4a(s, 0)), 2, 16), 8, 0);
+    set b = lpad(conv(md4reversebytes(md4a(s, 1)), 2, 16), 8, 0);
+    set c = lpad(conv(md4reversebytes(md4a(s, 2)), 2, 16), 8, 0);
+    set d = lpad(conv(md4reversebytes(md4a(s, 3)), 2, 16), 8, 0);
+    return concat(a, b, c, d);
 end;;
 
