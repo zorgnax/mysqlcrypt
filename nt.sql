@@ -44,5 +44,5 @@ deterministic
 begin
     declare ucs2le text default ucs2le(pass);
     return md4(ucs2le);
-end
+end;;
 
