@@ -14,6 +14,35 @@ to provide mysql with the correct host, port, user, and password options.
 
 These functions can be used anywhere mysql expects an expression to be:
 
-    > select unixmd5crypt('password');
-    > select lmcrypt('password');
+	mysql> select unixmd5crypt('abc');
+	+------------------------------------+
+	| unixmd5crypt('abc')                |
+	+------------------------------------+
+	| $1$soMaLg4U$UyayHy/QbItux779ljKdI1 |
+	+------------------------------------+
+	1 row in set (0.00 sec)
+
+	mysql> select lmcrypt('abc');
+	+----------------------------------+
+	| lmcrypt('abc')                   |
+	+----------------------------------+
+	| 8C6F5D02DEB21501AAD3B435B51404EE |
+	+----------------------------------+
+	1 row in set (0.06 sec)
+
+	mysql> select md4('abc');
+	+----------------------------------+
+	| md4('abc')                       |
+	+----------------------------------+
+	| A448017AAF21D8525FC10AE87AA6729D |
+	+----------------------------------+
+	1 row in set (0.01 sec)
+
+	mysql> select ntcrypt('abc');
+	+----------------------------------+
+	| ntcrypt('abc')                   |
+	+----------------------------------+
+	| E0FBA38268D0EC66EF1CB452D5885E53 |
+	+----------------------------------+
+	1 row in set (0.01 sec)
 
