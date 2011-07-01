@@ -32,7 +32,7 @@ begin
         set b = substr(x, 5, 4);
         set c = substr(x, 9, 4);
         set d = substr(x, 13, 4);
-        set m = concat(m, lpad(conv(concat(d, c, b, a), 2, 10), 10, 0));
+        set m = concat(m, lpad(conv(concat(c, d, a, b), 2, 10), 10, 0));
         set i = i + 1;
     end loop;
     return m;
@@ -238,7 +238,6 @@ begin
     if n <= 8 * 55 then
         set bin = rpad(concat(substr(bin, 1, 56 * 8), md4reversebytes(bits)), 8 * 64, 0);
         set m = md4m(bin);
-        return m;
         set s = md464(s, m);
     else
         begin end;
