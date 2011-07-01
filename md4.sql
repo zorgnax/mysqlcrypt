@@ -240,12 +240,16 @@ begin
         set m = md4m(bin);
         set s = md464(s, m);
     else
-        begin end;
+        set bin = rpad(concat(substr(bin, 1, 120 * 8), md4reversebytes(bits)), 8 * 128, 0);
+        set m = md4m(substr(bin, 1, 8 * 64));
+        set s = md464(s, m);
+        set m = md4m(substr(bin, 8 * 64 + 1, 8 * 64));
+        set s = md464(s, m);
     end if;
     set a = lpad(conv(md4reversebytes(md4a(s, 0)), 2, 16), 8, 0);
     set b = lpad(conv(md4reversebytes(md4a(s, 1)), 2, 16), 8, 0);
     set c = lpad(conv(md4reversebytes(md4a(s, 2)), 2, 16), 8, 0);
     set d = lpad(conv(md4reversebytes(md4a(s, 3)), 2, 16), 8, 0);
-    return concat(a, b, c, d);
+    return lower(concat(a, b, c, d));
 end;;
 
